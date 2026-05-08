@@ -1,4 +1,4 @@
-# Windows Container Environment — Step-by-Step Setup Guide - Draft 0.1
+# Windows Container Environment — Step-by-Step Setup Guide (v1.0)
 
 Technical guide for setting up a container development and testing environment
 
@@ -29,7 +29,7 @@ There are **two practical paths** depending on the available hardware:
 
 Both paths converge at Step 6 (developer tooling) and share the same Dockerfile and container workflow.
 
-**_Remark:_** It is assumed, that either a Windows 11 or Windows Server 2005 has been initialy set-up, either as a pysical or virtual machine.
+**_Remark:_** It is assumed that either a Windows 11 or Windows Server 2025 has been initially set up, either as a physical or virtual machine.
 
 ---
 
@@ -246,7 +246,7 @@ wsl --list --online
 wsl --install -d Ubuntu-24.04
 ```
 
-The distribution will be started, asking for an account and password. After having entered the data, exit from the Ubunto prompt by entering
+The distribution will be started, asking for an account and password. After having entered the data, exit from the Ubuntu prompt by entering
 
 ```bash
 exit
@@ -297,7 +297,7 @@ With Docker Engine/Desktop and WSL in place, install the development tooling via
 
 - If only Command-line tooling is desired/needed - i.e. not using any GUI for build - only Steps 6a & 6c need to be done.
 - If only GUI usage is desired/needed, only Steps 6b & 6c need to be done.
-- If all is desired/needed, do Steps 6a to &c.
+- If all is desired/needed, do Steps 6a to 6c.
 
 #### Step 6a - Install VS Code + required Toolsets
 
@@ -333,7 +333,7 @@ winget install --id Kitware.CMake -e --source winget --silent --accept-package-a
 winget install --id Microsoft.VisualStudio.2022.BuildTools -e --source winget --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --includeRecommended"
 ```
 
-For checking the Toolset installations, the fowwing can be executed:
+For checking the Toolset installations, the following can be executed:
 
 ```powershell
 # 1) Locate vswhere (works for both VS 2022 and VS 2026 installs)
@@ -352,7 +352,7 @@ $vswhere = @("${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere
 } 
 ```
 
-#### Step 6b - Instal Visual Studio incl. required Workloads
+#### Step 6b - Install Visual Studio incl. required Workloads
 
 ```powershell
 # Visual Studio 2026 Enterprise
@@ -371,8 +371,9 @@ winget install --id Microsoft.VisualStudio.2026.Enterprise -e `
 #### Step 6c - Install Python including required modules
 
 ```powershell
-# Python 3.14 (latest stable as of 2026-04 — Python 3.4 is end-of-life and not
-# available via winget; use 3.14 unless a specific legacy version is required).
+# Python 3.14 (latest stable as of 2026-04). Older 3.x branches are
+# end-of-life or out of mainstream support; use 3.14 unless a specific
+# legacy version is required.
 winget install --id Python.Python.3.14 -e --accept-source-agreements --accept-package-agreements
 
 # Updating PIP
@@ -624,7 +625,7 @@ Visual Studio 2026 reuses the active Docker context from the host CLI.
 2. In Visual Studio, open or create a project, then **Add → Docker Support…** (or **Container Orchestrator Support…** for compose). The generated `Dockerfile` / `docker-compose.yml` builds against the active context, so a `linux` context produces Linux images and a `default` context produces Windows images.
 3. To debug an already-running Linux container, use **Debug → Attach to Process…** → **Connection type: Docker (Linux Container)** → pick the container from the dropdown.
 
-### Step 20 - Visual Studio Code: Using Toolchain for C++
+### Step 20 — Visual Studio Code: Using Toolchain for C++
 
 The Build Tools require the Developer environment vars (INCLUDE, LIB, PATH for cl.exe, link.exe, msbuild.exe). Easiest option is to launch VS Code from the corresponding Developer Prompt in Terminal.
 
@@ -633,7 +634,7 @@ Alternatively add a VS Code Terminal Profile in **settings.json**:
 ```json
 "VS 2022 Dev": {
       "path": "cmd.exe",
-      "args": ["/k", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2020\\BuildTools\\Common7\\Tools\\VsDevCmd.bat"]
+      "args": ["/k", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\Tools\\VsDevCmd.bat"]
     },
 "VS 2026 Dev": {
       "path": "cmd.exe",
